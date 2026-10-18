@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Note for Purva ❤️</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-start: #FFF8F6;
+      --bg-end: #FFE5EC;
+      --primary: #D9385E;
+      --primary-hover: #B8284B;
+      --text-dark: #2B181E;
+      --text-muted: #6E5058;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(255, 255, 255, 0.9);
+      --callout-bg: #FFF0F3;
+      --callout-border: #F3C6D1;
+      --gold: #E09F67;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Floating Hearts */
+    .ambient-hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-heart {
+      position: absolute;
+      bottom: -40px;
+      color: rgba(217, 56, 94, 0.14);
+      animation: floatUp linear infinite;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(25deg) scale(1.1);
+        opacity: 0;
+      }
+    }
+
+    /* Replay Button */
+    .replay-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--callout-border);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(43, 24, 30, 0.05);
+    }
+
+    .replay-btn:hover {
+      background: #fff;
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* Stage 1: Envelope Intro */
+    .envelope-stage {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .envelope-stage.hidden {
+      opacity: 0;
+      transform: scale(0.92) translateY(15px);
+      pointer-events: none;
+      display: none;
+    }
+
+    .envelope-badge {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid var(--callout-border);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 22px;
+      box-shadow: 0 4px 15px rgba(217, 56, 94, 0.08);
+    }
+
+    .envelope-wrapper {
+      width: 300px;
+      height: 200px;
+      position: relative;
+      cursor: pointer;
+      perspective: 1000px;
+      transition: transform 0.3s ease;
+    }
+
+    .envelope-wrapper:hover {
+      transform: translateY(-6px);
+    }
+
+    .envelope-back {
+      position: absolute;
+      inset: 0;
+      background: #F8C8D4;
+      border-radius: 14px;
+      box-shadow: 0 20px 45px rgba(217, 56, 94, 0.18);
+    }
+
+    .envelope-letter-preview {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 12px;
+      height: 165px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .envelope-letter-preview p {
+      font-family: 'Fraunces', serif;
+      font-size: 1.05rem;
+      color: var(--text-dark);
+    }
+
+    .envelope-front {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      background: linear-gradient(160deg, #FFD6E0 0%, #F5B8C8 100%);
+      clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+      z-index: 3;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(180deg, #FFDFE7 0%, #F2AEC0 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.55s ease;
+      z-index: 4;
+      border-top-left-radius: 14px;
+      border-top-right-radius: 14px;
+    }
+
+    .wax-seal {
+      position: absolute;
+      top: 54%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 54px;
+      height: 54px;
+      background: radial-gradient(circle at 30% 30%, #E84A6F, #B52344);
+      border-radius: 50%;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.35rem;
+      box-shadow: 0 6px 16px rgba(181, 35, 68, 0.35), inset 0 2px 4px rgba(255,255,255,0.3);
+      border: 2px solid rgba(255, 215, 224, 0.5);
+      animation: pulseSeal 2s infinite ease-in-out;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    @keyframes pulseSeal {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.08); }
+    }
+
+    .envelope-wrapper.opening .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope-wrapper.opening .wax-seal {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    .envelope-wrapper.opening .envelope-letter-preview {
+      transform: translateY(-75px);
+    }
+
+    .tap-hint {
+      margin-top: 24px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Stage 2: Main Note Card */
+    .note-card {
+      position: relative;
+      z-index: 2;
+      max-width: 520px;
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 36px 32px;
+      box-shadow: 0 24px 60px rgba(43, 24, 30, 0.08), 0 4px 16px rgba(217, 56, 94, 0.05);
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .note-card.visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Top Self-Aware Callout */
+    .ai-callout {
+      background: var(--callout-bg);
+      border: 1px solid var(--callout-border);
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: var(--text-dark);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .ai-callout span.icon {
+      font-size: 1.05rem;
+      line-height: 1.2;
+      flex-shrink: 0;
+    }
+
+    /* Greeting & Body */
+    .greeting {
+      font-family: 'Fraunces', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .note-body p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .highlight-phrase {
+      background: linear-gradient(120deg, rgba(217, 56, 94, 0.14) 0%, rgba(217, 56, 94, 0.22) 100%);
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 600;
+      color: #B8284B;
+    }
+
+    /* Sign-off Row */
+    .sign-off-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+      padding-bottom: 26px;
+      border-bottom: 1px dashed var(--callout-border);
+    }
+
+    .signature {
+      font-family: 'Caveat', cursive;
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .meta-pill {
+      font-size: 0.76rem;
+      font-weight: 600;
+      background: #FFF5F7;
+      border: 1px solid var(--callout-border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    /* Response Buttons */
+    .response-section {
+      margin-top: 24px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 190px;
+      padding: 13px 18px;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      text-align: center;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(217, 56, 94, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(217, 56, 94, 0.32);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--text-dark);
+      border: 1px solid var(--callout-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--callout-bg);
+      transform: translateY(-2px);
+    }
+
+    /* Feedback Result Box */
+    .response-feedback {
+      margin-top: 18px;
+      background: #FFF9FA;
+      border: 1px solid var(--callout-border);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      display: none;
+      animation: fadeIn 0.35s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .response-feedback p {
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .copy-btn {
+      background: #fff;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* Burst Confetti Hearts */
+    .confetti-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 50;
+      font-size: 1.4rem;
+      animation: confettiFall 2.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translate(0, 0) scale(0.6) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(1.25) rotate(var(--rot));
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .note-card {
+        padding: 26px 22px;
+      }
+      .greeting {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Floating Hearts -->
+  <div class="ambient-hearts" id="ambientHearts"></div>
+
+  <!-- Replay Envelope Button -->
+  <button class="replay-btn" id="replayBtn" onclick="replayEnvelope()">
+    ↺ Replay Envelope
+  </button>
+
+  <!-- Stage 1: Envelope Intro -->
+  <div class="envelope-stage" id="envelopeStage">
+    <div class="envelope-badge" id="envelopeBadge">A little note for Purva</div>
+    
+    <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
+      <div class="envelope-back"></div>
+      <div class="envelope-letter-preview">
+        <p id="previewGreeting">Hey Purva,</p>
+      </div>
+      <div class="envelope-front"></div>
+      <div class="envelope-flap"></div>
+      <div class="wax-seal">❤️</div>
+    </div>
+
+    <p class="tap-hint">Tap the seal to open</p>
+  </div>
+
+  <!-- Stage 2: Main Confession Card -->
+  <main class="note-card" id="noteCard">
+    <h1 class="greeting" id="noteGreeting">Hey Purva,</h1>
+
+    <div class="note-body">
+      <p>
+        I've been wanting to tell you this properly. <span class="highlight-phrase">I really like you.</span>
+      </p>
+      <p>
+        Being around you makes me really happy. I might only have a little experience with relationships, and I'm still learning, but I'd love the chance to figure it out with you and do my genuine best.
+      </p>
+    </div>
+
+    <div class="sign-off-row">
+      <div class="signature" id="noteSignature">— Aditya</div>
+      <div class="meta-pill">🤖 Code: AI • ❤️ Feelings: 100% Me</div>
+    </div>
+
+    <div class="response-section">
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="selectResponse('mutual')">
+          The feeling is mutual ❤️
+        </button>
+        <button class="btn btn-secondary" onclick="selectResponse('talk')">
+          Let us talk about it 😊
+        </button>
+      </div>
+
+      <div class="response-feedback" id="responseFeedback">
+        <p id="feedbackText"></p>
+        <button class="copy-btn" id="copyBtn" onclick="copyReply()">
+          Copy reply message 📋
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Default Personalization Config
+    const CONFESSION_CONFIG = {
+      to: "Purva",
+      from: "— Aditya"
+    };
+
+    // Optional URL override (?to=...&from=...)
+    const params = new URLSearchParams(window.location.search);
+    const recipientName = params.get("to") || CONFESSION_CONFIG.to;
+    const senderName = params.get("from")
+      ? (params.get("from").startsWith("—") ? params.get("from") : `— ${params.get("from")}`)
+      : CONFESSION_CONFIG.from;
+
+    document.getElementById("envelopeBadge").textContent = `A little note for ${recipientName}`;
+    document.getElementById("previewGreeting").textContent = `Hey ${recipientName},`;
+    document.getElementById("noteGreeting").textContent = `Hey ${recipientName},`;
+    document.getElementById("noteSignature").textContent = senderName;
+    document.title = `A Note for ${recipientName} ❤️`;
+
+    // Generate Ambient Background Hearts
+    const ambientContainer = document.getElementById("ambientHearts");
+    const heartSymbols = ["❤️", "💗", "✨", "🤍"];
+    for (let i = 0; i < 16; i++) {
+      const heart = document.createElement("div");
+      heart.className = "ambient-heart";
+      heart.textContent = heartSymbols[i % heartSymbols.length];
+      heart.style.left = `${Math.random() * 100}%`;
+      heart.style.fontSize = `${14 + Math.random() * 16}px`;
+      heart.style.animationDuration = `${9 + Math.random() * 9}s`;
+      heart.style.animationDelay = `${Math.random() * 6}s`;
+      ambientContainer.appendChild(heart);
+    }
+
+    // Envelope Open & Replay Logic
+    function openEnvelope() {
+      const wrapper = document.getElementById("envelopeWrapper");
+      const stage = document.getElementById("envelopeStage");
+      const card = document.getElementById("noteCard");
+      const replayBtn = document.getElementById("replayBtn");
+
+      if (wrapper.classList.contains("opening")) return;
+      wrapper.classList.add("opening");
+
+      setTimeout(() => {
+        stage.classList.add("hidden");
+        card.style.display = "block";
+        requestAnimationFrame(() => {
+          card.classList.add("visible");
+          replayBtn.style.display = "inline-flex";
+        });
+      }, 650);
+    }
+
+    function replayEnvelope() {
+      const wrapper = document.getElementById("envelopeWrapper");
+      const stage = document.getElementById("envelopeStage");
+      const card = document.getElementById("noteCard");
+      const replayBtn = document.getElementById("replayBtn");
+      const feedback = document.getElementById("responseFeedback");
+
+      card.classList.remove("visible");
+      replayBtn.style.display = "none";
+      feedback.style.display = "none";
+
+      setTimeout(() => {
+        card.style.display = "none";
+        wrapper.classList.remove("opening");
+        stage.classList.remove("hidden");
+      }, 350);
+    }
+
+    // Interactive Response Selection
+    let currentReplyToCopy = "";
+
+    function selectResponse(type) {
+      const feedback = document.getElementById("responseFeedback");
+      const feedbackText = document.getElementById("feedbackText");
+      const copyBtn = document.getElementById("copyBtn");
+
+      feedback.style.display = "block";
+      copyBtn.textContent = "Copy reply message 📋";
+
+      if (type === "mutual") {
+        feedbackText.textContent = "You just made my day ❤️ Text me!";
+        currentReplyToCopy = "Hey! I saw your page — the feeling is mutual ❤️";
+        launchHeartConfetti();
+      } else {
+        feedbackText.textContent = "Take all the time you need — no rush or pressure at all. Text me whenever you're ready 😊";
+        currentReplyToCopy = "Hey! I just read your note, let's talk about it 😊";
+      }
+    }
+
+    function copyReply() {
+      if (!currentReplyToCopy) return;
+      navigator.clipboard.writeText(currentReplyToCopy).then(() => {
+        const copyBtn = document.getElementById("copyBtn");
+        copyBtn.textContent = "Copied! Send it over 💬";
+      }).catch(err => {
+        // Fallback for strict iframe permissions
+        const textarea = document.createElement("textarea");
+        textarea.value = currentReplyToCopy;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        const copyBtn = document.getElementById("copyBtn");
+        copyBtn.textContent = "Copied! Send it over 💬";
+      });
+    }
+
+    function launchHeartConfetti() {
+      const emojis = ["❤️", "💖", "✨", "🥰", "💗"];
+      for (let i = 0; i < 28; i++) {
+        const el = document.createElement("div");
+        el.className = "confetti-heart";
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = "50%";
+        el.style.top = "60%";
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 90 + Math.random() * 220;
+        el.style.setProperty("--tx", `${Math.cos(angle) * distance}px`);
+        el.style.setProperty("--ty", `${Math.sin(angle) * distance - 120}px`);
+        el.style.setProperty("--rot", `${(Math.random() - 0.5) * 90}deg`);
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 2600);
+      }
+    }
+  </script>
+</body>
+</html>
